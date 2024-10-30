@@ -63,7 +63,10 @@ dependencies {
     // Testing Navigation
     androidTestImplementation(libs.androidx.navigation.testing)
 
-    implementation(libs.androidx.material)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+    implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

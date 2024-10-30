@@ -12,18 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = md_theme_dark_primary,
+//    secondary = PurpleGrey80,
+//    tertiary = Pink80,
+    background = md_theme_dark_background,
+    outline = md_theme_light_outline
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = md_theme_light_primary,
+//    secondary = PurpleGrey40,
+//    tertiary = Pink40,
+    background = md_theme_light_background,
+    outline = md_theme_dark_outline
 
     /* Other default colors to override
-    background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -40,15 +43,19 @@ fun ParkItTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+//    val colorScheme = when {
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
+//
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+//    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+
+    val colorScheme = LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
