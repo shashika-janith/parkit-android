@@ -32,10 +32,10 @@ fun ProviderItem(
 ) {
     Box(
         modifier = Modifier
+            .clip(shape = RoundedCornerShape(12.dp))
+            .background(color = Color.White)
             .fillMaxWidth()
             .clickable { onItemClick() }
-            .background(color = Color.White)
-            .clip(shape = RoundedCornerShape(12.dp))
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
