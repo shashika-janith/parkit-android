@@ -58,8 +58,10 @@ fun ProviderItem(
                     listOf("Car", "Lorry", "Bike").forEach { tag -> Chip(tag = tag) }
                 }
                 Text(
-                    text = "Zero Hassle Parking", fontWeight = FontWeight.Bold,
-
+                    text = "Zero Hassle Parking",
+                    style = MaterialTheme.typography.bodyMedium.merge(
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
                 Text(
                     text = "422 Fleet Street, Waumandee, Tennessee, 9695",
