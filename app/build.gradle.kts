@@ -1,11 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.arcee.parkit"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.arcee.parkit"
@@ -50,6 +53,17 @@ android {
 }
 
 dependencies {
+    implementation(libs.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler)
+
+    implementation(libs.secrets.gradle.plugin)
+
+    // Android Maps Compose composables for the Maps SDK for Android
+    implementation(libs.maps.compose)
+
+    // Maps SDK for Android
+    implementation(libs.play.services.maps)
+
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
 
@@ -84,4 +98,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
