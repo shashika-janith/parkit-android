@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -17,16 +18,13 @@ fun Chip(tag: String) {
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 9.dp, vertical = 6.dp)
     ) {
-        Box(
-            modifier = Modifier.padding(horizontal = 9.dp, vertical = 6.dp)
-        ) {
-            Text(
-                text = tag,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelSmall,
-            )
-        }
+        Text(
+            text = tag,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.labelSmall.merge(fontWeight = FontWeight.SemiBold),
+        )
     }
 }
