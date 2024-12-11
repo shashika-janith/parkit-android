@@ -1,6 +1,7 @@
 package com.arcee.parkit.presentation.activities.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,12 +32,14 @@ import androidx.compose.ui.unit.dp
 import com.arcee.parkit.R
 
 @Composable
-fun ActivityCard() {
+fun ActivityCard(onClicked: (id: Int) -> Unit) {
     Box(
+
         modifier = Modifier
             .clip(shape = RoundedCornerShape(15.dp))
             .background(color = Color.White)
             .fillMaxWidth()
+            .clickable { onClicked(1) }
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
@@ -113,5 +116,5 @@ fun ActivityCard() {
 @Preview(showBackground = true)
 @Composable
 fun ActivityCardPreview() {
-    ActivityCard()
+    ActivityCard(onClicked = {})
 }
