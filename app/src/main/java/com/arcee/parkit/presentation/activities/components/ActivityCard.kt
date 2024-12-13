@@ -30,16 +30,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arcee.parkit.R
+import com.arcee.parkit.model.ParkingActivity
 
 @Composable
-fun ActivityCard(onClicked: (id: Int) -> Unit) {
+fun ActivityCard(data: ParkingActivity, onClicked: (id: Int, isActive: Boolean) -> Unit) {
     Box(
 
         modifier = Modifier
             .clip(shape = RoundedCornerShape(15.dp))
             .background(color = Color.White)
             .fillMaxWidth()
-            .clickable { onClicked(1) }
+            .clickable { if (data.id == 1) onClicked(data.id, false) else onClicked(data.id, true) }
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
@@ -107,7 +108,6 @@ fun ActivityCard(onClicked: (id: Int) -> Unit) {
                 )
                 Spacer(Modifier.weight(weight = 1f))
                 VehicleTypeChip(type = "car")
-
             }
         }
     }
@@ -115,6 +115,9 @@ fun ActivityCard(onClicked: (id: Int) -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun ActivityCardPreview() {
-    ActivityCard(onClicked = {})
+fun ActivityCardPreview(
+    activities: List<ParkingActivity> = listOf(ParkingActivity(id = 1)),
+    onClicked: (id: Int, isActive: Boolean) -> Unit = { _: Int, _: Boolean -> {}}
+) {
+    ActivityCard(onClicked = onClicked, data = activities[1])
 }

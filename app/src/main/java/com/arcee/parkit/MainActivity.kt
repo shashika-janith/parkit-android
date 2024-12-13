@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.arcee.parkit.presentation.Screen
+import com.arcee.parkit.presentation.active_session.ActiveSessionScreen
 import com.arcee.parkit.presentation.activity_detail.ActivityDetailScreen
 import com.arcee.parkit.presentation.main.MainScreen
 import com.arcee.parkit.presentation.parking_space_locator.ParkingSpaceLocatorScreen
@@ -37,11 +38,18 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.MainScreen.route) {
                             MainScreen(
                                 onProviderClicked = {
-                                    navController.navigate(Screen.ActivityDetailScreen.route)
+                                    navController.navigate(Screen.ProviderDetailScreen.route)
+                                },
+                                onActivityClicked = { id: Int, isActive: Boolean ->
+                                    if (isActive)
+                                        navController.navigate(Screen.ActiveSessionScreen.route)
+                                    else
+                                        navController.navigate(Screen.ActivityDetailScreen.route)
                                 },
                                 onSearchClicked = {
                                     navController.navigate(Screen.ParkingSpaceLocatorScreen.route)
                                 }
+
                             )
                         }
                         composable(Screen.ProviderDetailScreen.route + "/{providerId}") {
@@ -55,6 +63,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.SignInScreen.route) {
                             SignInScreen()
+                        }
+                        composable(Screen.ActiveSessionScreen.route) {
+                            ActiveSessionScreen(onNavigateBack = {})
                         }
                     }
                 }

@@ -39,12 +39,16 @@ val topLevelRoutes = listOf(
 )
 
 @Composable
-fun MainScreen(onProviderClicked: (id: Int) -> Unit, onSearchClicked: () -> Unit) {
-    Content(onProviderClicked = onProviderClicked, onSearchClicked = onSearchClicked)
+fun MainScreen(
+    onProviderClicked: (id: Int) -> Unit,
+    onActivityClicked: (id: Int, isActive: Boolean) -> Unit,
+    onSearchClicked: () -> Unit,
+) {
+    Content(onProviderClicked = onProviderClicked, onSearchClicked = onSearchClicked, onActivityClicked = onActivityClicked )
 }
 
 @Composable
-fun Content(onProviderClicked: (id: Int) -> Unit, onSearchClicked: () -> Unit) {
+fun Content(onProviderClicked: (id: Int) -> Unit, onActivityClicked: (id: Int, isActive: Boolean) -> Unit, onSearchClicked: () -> Unit) {
     var selectedItem by remember { mutableIntStateOf(0) }
     val navController = rememberNavController()
 
@@ -81,7 +85,7 @@ fun Content(onProviderClicked: (id: Int) -> Unit, onSearchClicked: () -> Unit) {
                 HomeScreen(onSearchClicked = onSearchClicked, onProviderClicked = onProviderClicked)
             }
             composable(Screen.ActivitiesScreen.route) {
-                ActivitiesScreen(onActivityClicked = onProviderClicked)
+                ActivitiesScreen(onActivityClicked = onActivityClicked)
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen()

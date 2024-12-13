@@ -10,4 +10,5 @@ sealed class Screen(val route: String) {
     object ActivityDetailScreen: Screen("activity-detail")
     object ParkingSpaceLocatorScreen: Screen("parking-space-locator")
     object SignInScreen: Screen("sign-in")
+    object ActiveSessionScreen: Screen("active-session")
 }

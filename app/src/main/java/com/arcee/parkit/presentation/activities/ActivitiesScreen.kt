@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.arcee.parkit.model.ParkingActivity
 import com.arcee.parkit.presentation.activities.components.ActivityCard
 
 @Composable
 fun ActivitiesScreen(
-    onActivityClicked: (id: Int) -> Unit
+    onActivityClicked: (id: Int, isActive: Boolean) -> Unit,
 ) {
     val activities = listOf(
         1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -40,8 +41,8 @@ fun ActivitiesScreen(
                     .padding(horizontal = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(activities) { _p ->
-                    ActivityCard(onClicked = onActivityClicked)
+                items(activities) { ele ->
+                    ActivityCard(data = ParkingActivity(id = ele), onClicked = onActivityClicked)
                 }
             }
         }
@@ -50,6 +51,8 @@ fun ActivitiesScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ActivityScreenPreview() {
-    ActivitiesScreen(onActivityClicked = {})
+fun ActivityScreenPreview(
+    onActivityClicked: (id: Int, isActive: Boolean) -> Unit = { _: Int, _: Boolean -> {}}
+) {
+    ActivitiesScreen(onActivityClicked = onActivityClicked)
 }
