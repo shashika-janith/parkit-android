@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-kapt")
+//    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -52,6 +53,16 @@ android {
 }
 
 dependencies {
+    // Hilt
+//    implementation("com.google.dagger:hilt-android:2.51.1")
+//    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+//    implementation("libs.androidx.lifecycle.viewmodel.compose.v285")
+
+    // Retrofit
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.gson)
+
     // Android Maps Compose composables for the Maps SDK for Android
     implementation(libs.maps.compose)
 

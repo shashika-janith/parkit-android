@@ -2,6 +2,7 @@
 accompanistFlowlayout = "0.17.0"
 agp = "8.5.0"
 coilCompose = "3.0.0-rc02"
+gson = "2.11.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -12,20 +13,19 @@ activityCompose = "1.9.0"
 composeBom = "2024.04.01"
 lifecycleViewmodelCompose = "2.8.6"
 mapsCompose = "6.2.1"
-material = "1.7.4"
 navigationCompose = "2.8.3"
 navigationDynamicFeaturesFragment = "2.8.3"
 navigationFragment = "2.8.3"
 navigationTesting = "2.8.3"
 navigationUi = "2.8.3"
 playServicesMaps = "19.0.0"
+retrofit = "2.11.0"
 secretsGradlePlugin = "2.0.1"
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
-androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationDynamicFeaturesFragment" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationFragment" }
@@ -33,6 +33,7 @@ androidx-navigation-testing = { module = "androidx.navigation:navigation-testing
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationUi" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -49,6 +50,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 material3 = { module = "androidx.compose.material3:material3" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 
 [plugins]
