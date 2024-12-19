@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
@@ -54,14 +53,27 @@ android {
 }
 
 dependencies {
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
-//    implementation("libs.androidx.lifecycle.viewmodel.compose.v285")
+    // Compose Dependencies
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.flowlayout)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.ui.text.google.fonts)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Coroutine Lifecycle Scopes
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v282)
 
     // Retrofit
     implementation(libs.retrofit2.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.gson)
 
     // Android Maps Compose composables for the Maps SDK for Android
@@ -121,9 +133,4 @@ secrets {
     // "sdk.dir" is ignored by default.
     ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
     ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
-}
-
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
 }
