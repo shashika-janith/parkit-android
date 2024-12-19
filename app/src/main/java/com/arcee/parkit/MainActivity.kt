@@ -18,7 +18,10 @@ import com.arcee.parkit.presentation.parking_space_locator.ParkingSpaceLocatorSc
 import com.arcee.parkit.presentation.provider_detail.ProviderDetailScreen
 import com.arcee.parkit.presentation.sign_in.SignInScreen
 import com.arcee.parkit.ui.theme.ParkItTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ParkItTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     val navController = rememberNavController()
 
