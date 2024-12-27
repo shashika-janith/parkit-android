@@ -8,6 +8,11 @@ data class UserSessionDto(
     val userId: Int,
     val name: String,
     val email: String,
+    val phone: String,
+    @SerializedName("email_verified")
+    val emailVerified: Boolean,
+    @SerializedName("phone_verified")
+    val phoneVerified: Boolean,
     @SerializedName("access_token")
     val accessToken: String,
     @SerializedName("refresh_token")
@@ -22,7 +27,10 @@ fun UserSessionDto.toUser(): User {
         id = userId,
         name = name,
         email = email,
+        phone = phone,
+        emailVerified = emailVerified,
+        phoneVerified = phoneVerified,
         accessToken = accessToken,
-        roles = roles
+        roles = roles,
     )
 }
