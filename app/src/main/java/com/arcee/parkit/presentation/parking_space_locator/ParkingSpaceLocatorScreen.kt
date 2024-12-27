@@ -1,10 +1,15 @@
 package com.arcee.parkit.presentation.parking_space_locator
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -15,8 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.arcee.parkit.presentation.parking_space_locator.components.ProviderItem
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -39,12 +44,11 @@ fun ParkingSpaceLocatorScreen(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Scaffold { innerPadding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = Color.White)
         ) {
             GoogleMap(
                 modifier = Modifier.matchParentSize(),
@@ -58,6 +62,17 @@ fun ParkingSpaceLocatorScreen(
                         showBottomSheet = true
                         true
                     }
+                )
+            }
+            FilledTonalIconButton(
+                onClick = { onNavigateBack() },
+                modifier = Modifier.padding(12.dp),
+                colors = IconButtonDefaults.filledTonalIconButtonColors()
+                    .copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = "Navigate back",
                 )
             }
             if (showBottomSheet) {
