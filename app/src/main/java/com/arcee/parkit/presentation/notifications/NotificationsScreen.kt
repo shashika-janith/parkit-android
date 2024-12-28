@@ -16,13 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.arcee.parkit.domain.model.Notification
 import com.arcee.parkit.presentation.notifications.components.NotificationItem
 
 @Composable
-fun NotificationsScreen() {
-    val notifications = listOf(
-        1, 2, 3, 4, 5, 6, 7, 8, 9
-    )
+fun NotificationsScreen(viewModel: NotificationViewModel = hiltViewModel<NotificationViewModel>()) {
+    val state = viewModel.state.value
 
     Box(
         modifier = Modifier.background(Color.White)
@@ -33,14 +33,21 @@ fun NotificationsScreen() {
                 style = MaterialTheme.typography.headlineLarge.merge(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
             )
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                itemsIndexed(notifications) { index, _p ->
-                    NotificationItem(last = notifications.size == index + 1)
+                itemsIndexed(
+                    items = state.notifications,
+                    key = { _, notification: Notification -> notification.notificationId },
+                ) { index: Int, notification: Notification ->
+                    NotificationItem(
+                        data = notification,
+                        last = state.notifications.size == index + 1
+                    )
                 }
             }
         }

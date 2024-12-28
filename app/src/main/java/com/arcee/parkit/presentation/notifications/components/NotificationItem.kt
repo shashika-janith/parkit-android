@@ -21,10 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.arcee.parkit.presentation.activities.components.VehicleTypeChip
+import com.arcee.parkit.common.VehicleTypeEnum
+import com.arcee.parkit.domain.model.Notification
+import com.arcee.parkit.presentation.components.VehicleTypeChip
 
 @Composable
-fun NotificationItem(last: Boolean) {
+fun NotificationItem(data: Notification, last: Boolean) {
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(15.dp))
@@ -32,7 +34,7 @@ fun NotificationItem(last: Boolean) {
             .fillMaxWidth()
     ) {
         Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)) {
-            VehicleTypeChip(type = "car")
+            VehicleTypeChip(type = VehicleTypeEnum.LORRY)
             Spacer(modifier = Modifier.width(9.dp))
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
@@ -60,6 +62,15 @@ fun NotificationItem(last: Boolean) {
 
 @Preview(showBackground = true)
 @Composable
-fun NotificationItemPreview() {
-    NotificationItem(last = false)
+fun NotificationItemPreview(
+    data: Notification = Notification(
+        notificationId = 12345,
+        title = "Parking Spot Reserved",
+        message = "Your parking spot #101 has been successfully reserved.",
+        timestamp = "2024-12-17T10:15:30Z",
+        type = "reservation",
+        isRead = false
+    )
+) {
+    NotificationItem(last = false, data = data)
 }
