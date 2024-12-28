@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78109643232",
+    "project_id": "parkit-3318e",
+    "storage_bucket": "parkit-3318e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78109643232:android:ba60d2a4b9d49e2ea1db85",
+        "android_client_info": {
+          "package_name": "com.arcee.parkit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP_F1rXGK1FRoSCfGare6qiYqzBFoDZTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
