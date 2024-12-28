@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,18 +24,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.arcee.parkit.R
 import com.arcee.parkit.presentation.components.Chip
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProviderItem(
-) {
+fun ProviderItem() {
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(12.dp))
@@ -119,6 +123,33 @@ fun ProviderItem(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(9.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                OutlinedIconButton(onClick = {}, modifier = Modifier.padding(0.dp)) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_bookmark_border_24),
+                        contentDescription = "Bookmark",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+                Button(
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth(1f),
+                ) {
+                    Text(
+                        text = "Start Navigation",
+                        fontSize = 16.sp,
+                        style = TextStyle(color = Color.White)
+                    )
+                }
+            }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun ProviderItemPreview() {
+    ProviderItem()
 }
