@@ -30,7 +30,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arcee.parkit.R
+import com.arcee.parkit.common.VehicleTypeEnum
 import com.arcee.parkit.model.ParkingActivity
+import com.arcee.parkit.presentation.components.VehicleTypeChip
 
 @Composable
 fun ActivityCard(data: ParkingActivity, onClicked: (id: Int, isActive: Boolean) -> Unit) {
@@ -107,7 +109,7 @@ fun ActivityCard(data: ParkingActivity, onClicked: (id: Int, isActive: Boolean) 
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Spacer(Modifier.weight(weight = 1f))
-                VehicleTypeChip(type = "car")
+                VehicleTypeChip(type = VehicleTypeEnum.BUS)
             }
         }
     }

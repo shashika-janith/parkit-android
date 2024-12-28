@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.activities.components
+package com.arcee.parkit.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,25 +13,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.arcee.parkit.R
+import com.arcee.parkit.common.VehicleTypeEnum
 
 @Composable
-fun VehicleTypeChip(type: String) {
+fun VehicleTypeChip(type: VehicleTypeEnum) {
+
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(6.dp)
     ) {
         Box(
             modifier = Modifier
-                .width(36.dp)
-                .height(36.dp)
-                .background(MaterialTheme.colorScheme.secondary)
-
+                .clip(shape = RoundedCornerShape(50))
+                .background(MaterialTheme.colorScheme.surfaceDim)
+                .padding(9.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.car_24),
+                painter = painterResource(id = VehicleTypeEnum.getVehicleTypeIcon(type)),
+                tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null,
                 modifier = Modifier
                     .width(24.dp)
@@ -40,4 +43,12 @@ fun VehicleTypeChip(type: String) {
             )
         }
     }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun ActivityScreenPreview(
+    type: VehicleTypeEnum = VehicleTypeEnum.CAR
+) {
+    VehicleTypeChip(type = type)
 }

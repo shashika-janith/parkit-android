@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.notifications
+package com.arcee.parkit.presentation.activities
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
