@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,10 +40,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.arcee.parkit.data.remote.dto.SignUpDto
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    viewModel: SignUpViewModel = hiltViewModel<SignUpViewModel>()
+) {
+    val state = viewModel.state.value
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -53,8 +58,22 @@ fun SignUpScreen() {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    fun handleSignUp() {
+    LaunchedEffect(state.error) {
+        if (state.error.isNotBlank()) {
+            scope.launch {
+                snackbarHostState.showSnackbar("Failed to sign-up. Try again!")
+            }
+        }
+    }
 
+    fun handleSignUp() {
+        val dto = SignUpDto(
+            phone = phone,
+            name = name,
+            password = password
+        )
+
+        viewModel.signUp(dto)
     }
 
     Scaffold(
@@ -108,7 +127,7 @@ fun SignUpScreen() {
                     label = { Text("Phone No.") },
                     trailingIcon = {
                         Icon(
-                            imageVector = Icons.Filled.Email,
+                            imageVector = Icons.Filled.Phone,
                             contentDescription = null
                         )
                     },
