@@ -15,9 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,28 +36,56 @@ import com.arcee.parkit.ui.theme.ParkItTheme
 @Composable
 fun HomeScreen(
     onSearchClicked: () -> Unit,
-    onProviderClicked: (id: Int) -> Unit
+    onProviderClicked: (id: Int) -> Unit,
+    onNotificationsClicked: () -> Unit
 ) {
-    HomeScreenContent(onSearchClicked = onSearchClicked, onProviderClicked = onProviderClicked)
+    HomeScreenContent(
+        onSearchClicked = onSearchClicked,
+        onProviderClicked = onProviderClicked,
+        onNotificationsClicked = onNotificationsClicked
+    )
 }
 
 @Composable
-fun HomeScreenContent(onSearchClicked: () -> Unit, onProviderClicked: (id: Int) -> Unit) {
+fun HomeScreenContent(
+    onSearchClicked: () -> Unit,
+    onProviderClicked: (id: Int) -> Unit,
+    onNotificationsClicked: () -> Unit
+) {
     val providers = listOf(
         1, 2, 3, 4, 5, 6, 7, 8, 9
     )
 
     Box(
-        modifier = Modifier
-            .padding(vertical = 12.dp)
-            .background(MaterialTheme.colorScheme.background),
-
-        ) {
+        modifier = Modifier.padding(vertical = 12.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 10.dp)
         ) {
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Column {
+                    Text(
+                        text = "Hi, John Doe",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 3.dp)
+                    )
+                    Text("Thursday, 19 December 2024", style = MaterialTheme.typography.labelLarge)
+                }
+                OutlinedIconButton(
+                    onClick = onNotificationsClicked,
+                    modifier = Modifier.padding(6.dp)
+                ) {
+                    Icon(Icons.Filled.Notifications, contentDescription = "Notifications")
+                }
+            }
             Box(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(12.dp))
@@ -69,7 +99,7 @@ fun HomeScreenContent(onSearchClicked: () -> Unit, onProviderClicked: (id: Int) 
                     Text(
                         text = "Park Easy & Safely",
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
                     Row(
@@ -127,8 +157,16 @@ fun HomeScreenContent(onSearchClicked: () -> Unit, onProviderClicked: (id: Int) 
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenContentPreview() {
+fun HomeScreenContentPreview(
+    onSearchClicked: () -> Unit = {},
+    onProviderClicked: (id: Int) -> Unit = {},
+    onNotificationsClicked: () -> Unit = {}
+) {
     ParkItTheme {
-        HomeScreenContent(onSearchClicked = {}, onProviderClicked = {})
+        HomeScreenContent(
+            onSearchClicked = onSearchClicked,
+            onProviderClicked = onProviderClicked,
+            onNotificationsClicked = onNotificationsClicked
+        )
     }
 }
