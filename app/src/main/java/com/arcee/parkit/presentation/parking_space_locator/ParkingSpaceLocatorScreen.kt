@@ -1,5 +1,7 @@
 package com.arcee.parkit.presentation.parking_space_locator
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arcee.parkit.presentation.parking_space_locator.components.ProviderItem
@@ -35,6 +38,8 @@ import com.google.maps.android.compose.rememberMarkerState
 fun ParkingSpaceLocatorScreen(
     onNavigateBack: () -> Unit
 ) {
+    val context = LocalContext.current;
+
     val singapore = LatLng(1.35, 103.87)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(singapore, 15f)
@@ -43,6 +48,23 @@ fun ParkingSpaceLocatorScreen(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    /**
+     * Initiate a phone call.
+     */
+    fun handleDialPhoneNumber(phoneNumber: String) {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        }
+    }
+
+    /**
+     * Add to favourites.
+     */
+    fun handleSaveToFavourites() {}
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Box(
@@ -79,7 +101,10 @@ fun ParkingSpaceLocatorScreen(
                 ModalBottomSheet(onDismissRequest = {
                     showBottomSheet = false
                 }) {
-                    ProviderItem()
+                    ProviderItem(
+                        onBookmarkClicked = { },
+                        onPhoneClicked = { phoneNumber -> handleDialPhoneNumber(phoneNumber) }
+                    )
                 }
             }
         }
