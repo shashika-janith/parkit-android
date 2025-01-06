@@ -26,14 +26,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.arcee.parkit.R
+import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.components.Chip
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProviderItem(
+    data: Provider,
     onItemClick: (id: Int) -> Unit
 ) {
     Box(modifier = Modifier
@@ -64,13 +68,13 @@ fun ProviderItem(
                         }
                     }
                     Text(
-                        text = "Zero Hassle Parking",
+                        text = data.name,
                         style = MaterialTheme.typography.bodyMedium.merge(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Text(
-                        text = "422 Fleet Street, Waumandee, Tennessee, 9695",
+                        text = data.address,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -114,7 +118,7 @@ fun ProviderItem(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "6 Available",
+                        text = "${data.availableSpots} Available",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelSmall.merge(fontWeight = FontWeight.SemiBold),
                     )
@@ -122,4 +126,26 @@ fun ProviderItem(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProviderItemPreview(
+    data: Provider = Provider(
+        id = 1L,
+        name = "Downtown Parking Garage",
+        address = "123 Main St, Downtown",
+        latitude = 40.7128F,
+        longitude = -74.006F,
+        capacity = 200,
+        availableSpots = 25,
+        contactNumber = "+1234567890",
+        email = "info@downtownparking.com"
+    ),
+    onItemClick: (id: Int) -> Unit = {}
+) {
+    ProviderItem(
+        data = data,
+        onItemClick = onItemClick
+    )
 }

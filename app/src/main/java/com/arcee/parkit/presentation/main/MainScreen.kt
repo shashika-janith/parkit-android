@@ -37,7 +37,6 @@ val topLevelRoutes = listOf(
     TopLevelRoute("Home", Screen.HomeScreen.route, Icons.Filled.Home),
     TopLevelRoute("Activities", Screen.ActivitiesScreen.route, Icons.Filled.Menu),
     TopLevelRoute("Favourites", Screen.FavouriteScreen.route, Icons.Filled.Favorite),
-//    TopLevelRoute("Notifications", Screen.NotificationsScreen.route, Icons.Filled.Notifications),
     TopLevelRoute("Profile", Screen.ProfileScreen.route, Icons.Filled.Person),
 )
 

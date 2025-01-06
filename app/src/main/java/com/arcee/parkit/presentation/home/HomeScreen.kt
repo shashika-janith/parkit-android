@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -30,19 +30,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.home.components.ProviderItem
 import com.arcee.parkit.ui.theme.ParkItTheme
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     onSearchClicked: () -> Unit,
     onProviderClicked: (id: Int) -> Unit,
     onNotificationsClicked: () -> Unit
 ) {
+    val providers = viewModel.providerPagingFlow.collectAsLazyPagingItems()
+
     HomeScreenContent(
         onSearchClicked = onSearchClicked,
         onProviderClicked = onProviderClicked,
-        onNotificationsClicked = onNotificationsClicked
+        onNotificationsClicked = onNotificationsClicked,
+        providers = providers
     )
 }
 
@@ -50,12 +62,9 @@ fun HomeScreen(
 fun HomeScreenContent(
     onSearchClicked: () -> Unit,
     onProviderClicked: (id: Int) -> Unit,
-    onNotificationsClicked: () -> Unit
+    onNotificationsClicked: () -> Unit,
+    providers: LazyPagingItems<Provider>
 ) {
-    val providers = listOf(
-        1, 2, 3, 4, 5, 6, 7, 8, 9
-    )
-
     Box(
         modifier = Modifier.padding(vertical = 12.dp)
     ) {
@@ -80,16 +89,14 @@ fun HomeScreenContent(
                     Text("Thursday, 19 December 2024", style = MaterialTheme.typography.labelLarge)
                 }
                 OutlinedIconButton(
-                    onClick = onNotificationsClicked,
-                    modifier = Modifier.padding(6.dp)
+                    onClick = onNotificationsClicked, modifier = Modifier.padding(6.dp)
                 ) {
                     Icon(Icons.Filled.Notifications, contentDescription = "Notifications")
                 }
             }
-            Box(
-                modifier = Modifier
-                    .clip(shape = RoundedCornerShape(12.dp))
-                    .clickable { onSearchClicked() }) {
+            Box(modifier = Modifier
+                .clip(shape = RoundedCornerShape(12.dp))
+                .clickable { onSearchClicked() }) {
                 Column(
                     modifier = Modifier
                         .background(color = Color.White)
@@ -111,8 +118,7 @@ fun HomeScreenContent(
                             .padding(horizontal = 15.dp, vertical = 9.dp)
                     ) {
                         Text(
-                            text = "Find parking space",
-                            style = MaterialTheme.typography.labelSmall
+                            text = "Find parking space", style = MaterialTheme.typography.labelSmall
                         )
                         Spacer(Modifier.weight(weight = 1f))
                         Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
@@ -135,8 +141,7 @@ fun HomeScreenContent(
                 Spacer(Modifier.weight(weight = 1f))
                 TextButton(onClick = { /*TODO*/ }) {
                     Text(
-                        text = "See More",
-                        style = MaterialTheme.typography.bodySmall.merge(
+                        text = "See More", style = MaterialTheme.typography.bodySmall.merge(
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -147,8 +152,25 @@ fun HomeScreenContent(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(providers) { _ ->
-                    ProviderItem(onItemClick = onProviderClicked)
+                if (providers.loadState.refresh == LoadState.Loading) {
+                    item {
+                        Text(
+                            text = "Waiting for items to load from the backend",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.CenterHorizontally)
+                        )
+                    }
+                } else {
+                    items(
+                        count = providers.itemCount,
+                        key = providers.itemKey { it.id },
+                    ) { index ->
+                        val item = providers[index]
+                        if (item != null) {
+                            ProviderItem(data = item, onItemClick = onProviderClicked)
+                        }
+                    }
                 }
             }
         }
@@ -158,15 +180,18 @@ fun HomeScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenContentPreview(
+    providers: LazyPagingItems<Provider> = flowOf(PagingData.empty<Provider>()).collectAsLazyPagingItems(),
     onSearchClicked: () -> Unit = {},
     onProviderClicked: (id: Int) -> Unit = {},
-    onNotificationsClicked: () -> Unit = {}
-) {
+    onNotificationsClicked: () -> Unit = {},
+
+    ) {
     ParkItTheme {
         HomeScreenContent(
             onSearchClicked = onSearchClicked,
             onProviderClicked = onProviderClicked,
-            onNotificationsClicked = onNotificationsClicked
+            onNotificationsClicked = onNotificationsClicked,
+            providers = providers
         )
     }
 }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +39,10 @@ import com.arcee.parkit.presentation.components.Chip
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProviderItem() {
+fun ProviderItem(
+    onBookmarkClicked: (id: Int) -> Unit,
+    onPhoneClicked: (phoneNumber: String) -> Unit,
+) {
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(12.dp))
@@ -127,6 +132,13 @@ fun ProviderItem() {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 OutlinedIconButton(onClick = {}, modifier = Modifier.padding(0.dp)) {
                     Icon(
+                        imageVector = Icons.Rounded.Phone,
+                        contentDescription = "Call",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+                OutlinedIconButton(onClick = {}, modifier = Modifier.padding(0.dp)) {
+                    Icon(
                         painter = painterResource(R.drawable.baseline_bookmark_border_24),
                         contentDescription = "Bookmark",
                         tint = MaterialTheme.colorScheme.onSecondaryContainer
@@ -150,6 +162,12 @@ fun ProviderItem() {
 
 @Preview(showBackground = true)
 @Composable
-fun ProviderItemPreview() {
-    ProviderItem()
+fun ProviderItemPreview(
+    onBookmarkClicked: (id: Int) -> Unit = {},
+    onPhoneClicked: (phoneNumber: String) -> Unit = {},
+) {
+    ProviderItem(
+        onBookmarkClicked = onBookmarkClicked,
+        onPhoneClicked = onPhoneClicked
+    )
 }
