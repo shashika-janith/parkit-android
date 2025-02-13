@@ -1,15 +1,20 @@
 package com.arcee.parkit
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,11 +23,11 @@ import com.arcee.parkit.presentation.Screen
 import com.arcee.parkit.presentation.active_session.ActiveSessionScreen
 import com.arcee.parkit.presentation.activity_detail.ActivityDetailScreen
 import com.arcee.parkit.presentation.main.MainScreen
+import com.arcee.parkit.presentation.notifications.NotificationsScreen
 import com.arcee.parkit.presentation.parking_space_locator.ParkingSpaceLocatorScreen
 import com.arcee.parkit.presentation.provider_detail.ProviderDetailScreen
 import com.arcee.parkit.presentation.sign_in.SignInScreen
 import com.arcee.parkit.presentation.sign_up.SignUpScreen
-import com.arcee.parkit.presentation.notifications.NotificationsScreen
 import com.arcee.parkit.ui.theme.ParkItTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -31,6 +36,8 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPreferencesRepo: UserPreferencesRepository
+
+    val viewModel: LocationPermissionViewModel by viewModels<LocationPermissionViewModel>()
 
     private fun startNavigationGM(lat: Double, lon: Double) {
         val gmmIntentUri =
@@ -112,5 +119,56 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        viewModel.state.observe(this) { status ->
+            when {
+                PermissionStatus.GRANTED == status -> {
+//                    TODO("Navigate to home screen")
+                }
+
+                PermissionStatus.DENIED == status -> {
+//                    TODO("Show an educational UI")
+                }
+                else -> {
+                    requestLocationPermission()
+                }
+            }
+        }
+
+        // Check and request location permission on start.
+        checkLocationPermission()
+    }
+
+    private fun checkLocationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                viewModel.updatePermissionStatus(PermissionStatus.GRANTED)
+                println("Permission granted")
+//                TODO("Navigate to home screen")
+            }
+//            ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_DENIED -> {
+//                viewModel.updatePermissionStatus(PermissionStatus.DENIED)
+//                println("Permission denied")
+//                TODO("Show an educational UI")
+//            }
+            else -> {
+                viewModel.requestLocationPermission()
+            }
+        }
+    }
+
+    private val requestLocationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            viewModel.updatePermissionStatus(if (isGranted) PermissionStatus.GRANTED else PermissionStatus.DENIED)
+        }
+
+    private fun requestLocationPermission() {
+        requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }

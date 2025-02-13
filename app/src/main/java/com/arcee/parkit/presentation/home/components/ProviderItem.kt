@@ -140,7 +140,8 @@ fun ProviderItemPreview(
         capacity = 200,
         availableSpots = 25,
         contactNumber = "+1234567890",
-        email = "info@downtownparking.com"
+        email = "info@downtownparking.com",
+        hourlyRate = 150.00F
     ),
     onItemClick: (id: Int) -> Unit = {}
 ) {

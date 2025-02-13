@@ -111,7 +111,9 @@ fun Content(
                 ActivitiesScreen(onActivityClicked = onActivityClicked)
             }
             composable(Screen.ProfileScreen.route) {
-                ProfileScreen()
+                ProfileScreen(
+                    onNavigateBack = { TODO() }
+                )
             }
             composable(Screen.FavouriteScreen.route) {
                 FavouritesScreen()

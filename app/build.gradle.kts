@@ -80,9 +80,10 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    implementation(libs.androidx.ui.text.google.fonts)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.androidx.ui.text.google.fonts)
 
     // Coroutine Lifecycle Scopes
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
