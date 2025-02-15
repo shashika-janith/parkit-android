@@ -33,6 +33,7 @@ fun TopBar(onNavigateBack: () -> Unit, label: String) {
             )
         }
         Text(
+            modifier = Modifier.weight(1f),
             text = label,
             style = MaterialTheme.typography.headlineSmall.merge(fontWeight = FontWeight.Bold),
         )

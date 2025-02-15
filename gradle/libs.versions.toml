@@ -2,6 +2,7 @@
 accompanistFlowlayout = "0.36.0"
 agp = "8.5.0"
 coilCompose = "3.0.0-rc02"
+constraintlayoutCompose = "1.1.0"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.1"
 firebaseBom = "33.7.0"
@@ -34,6 +35,7 @@ uiTextGoogleFonts = "1.7.6"
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }

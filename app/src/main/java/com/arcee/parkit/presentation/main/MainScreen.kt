@@ -112,7 +112,7 @@ fun Content(
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(
-                    onNavigateBack = { TODO() }
+                    handleSignOut = { TODO() }
                 )
             }
             composable(Screen.FavouriteScreen.route) {
