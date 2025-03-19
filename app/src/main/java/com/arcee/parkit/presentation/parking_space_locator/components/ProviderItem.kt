@@ -1,5 +1,6 @@
 package com.arcee.parkit.presentation.parking_space_locator.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,15 +34,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.arcee.parkit.R
+import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.components.Chip
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProviderItem(
+    data: Provider,
     onBookmarkClicked: (id: Int) -> Unit,
     onPhoneClicked: (phoneNumber: String) -> Unit,
+    onStartNavClicked: (lat: Double, lon: Double) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -53,8 +56,15 @@ fun ProviderItem(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                AsyncImage(
-                    model = "https://citations.robbinsparking.com/assets/images/2022-06-oie_jpg-1.png",
+//                AsyncImage(
+//                    model = "https://citations.robbinsparking.com/assets/images/2022-06-oie_jpg-1.png",
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .width(90.dp)
+//                        .height(90.dp)
+//                )
+                Image(
+                    painter = painterResource(R.drawable.img_parking_area),
                     contentDescription = null,
                     modifier = Modifier
                         .width(90.dp)
@@ -72,13 +82,13 @@ fun ProviderItem(
                         }
                     }
                     Text(
-                        text = "Zero Hassle Parking",
+                        text = data.name,
                         style = MaterialTheme.typography.bodyMedium.merge(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Text(
-                        text = "422 Fleet Street, Waumandee, Tennessee, 9695",
+                        text = data.address,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -102,7 +112,7 @@ fun ProviderItem(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "LKR 150.00/hr",
+                        text = "LKR ${data.hourlyRate}/hr",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelSmall.merge(fontWeight = FontWeight.SemiBold),
                     )
@@ -145,7 +155,7 @@ fun ProviderItem(
                     )
                 }
                 Button(
-                    onClick = { },
+                    onClick = { onStartNavClicked(data.latitude, data.longitude) },
                     modifier = Modifier.fillMaxWidth(1f),
                 ) {
                     Text(
@@ -163,11 +173,24 @@ fun ProviderItem(
 @Preview(showBackground = true)
 @Composable
 fun ProviderItemPreview(
+    data: Provider = Provider(
+        id = 2L,
+        name = "Central Mall Parking",
+        address = "456 Elm St, Townsville",
+        latitude = 40.7128,
+        longitude = -74.0060,
+        capacity = 30,
+        hourlyRate = 150f,
+        phone = "0715180287"
+    ),
     onBookmarkClicked: (id: Int) -> Unit = {},
     onPhoneClicked: (phoneNumber: String) -> Unit = {},
+    onStartNavClicked: (lat: Double, lon: Double) -> Unit = { lat, long -> }
 ) {
     ProviderItem(
+        data = data,
         onBookmarkClicked = onBookmarkClicked,
-        onPhoneClicked = onPhoneClicked
+        onPhoneClicked = onPhoneClicked,
+        onStartNavClicked = onStartNavClicked
     )
 }

@@ -3,18 +3,20 @@ package com.arcee.parkit.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.arcee.parkit.common.Constants
 import com.arcee.parkit.data.local.AppDatabase
+import com.arcee.parkit.data.local.ProviderEntity
 import com.arcee.parkit.data.remote.IParkItApi
-import com.arcee.parkit.data.remote.ProvidersRemotePagingSource
+import com.arcee.parkit.data.remote.PagingSourceFactory
+import com.arcee.parkit.data.remote.ProviderRemoteMediator
 import com.arcee.parkit.data.repository.NotificationRepositoryImpl
 import com.arcee.parkit.data.repository.ProviderRepositoryImpl
 import com.arcee.parkit.data.repository.UserPreferencesRepository
 import com.arcee.parkit.data.repository.UserRepositoryImpl
-import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.domain.repository.INotificationRepository
 import com.arcee.parkit.domain.repository.IProviderRepository
 import com.arcee.parkit.domain.repository.IUserRepository
@@ -53,8 +55,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesProviderRepository(api: IParkItApi): IProviderRepository {
-        return ProviderRepositoryImpl(api)
+    fun providesProviderRepository(pagingSourceFactory: PagingSourceFactory): IProviderRepository {
+        return ProviderRepositoryImpl(pagingSourceFactory)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPagingSourceFactory(api: IParkItApi): PagingSourceFactory {
+        return PagingSourceFactory(api)
     }
 
     @Provides
@@ -87,11 +95,17 @@ object AppModule {
 //        )
 //    }
 
+    @OptIn(ExperimentalPagingApi::class)
     @Provides
     @Singleton
-    fun providesProvidersPager(api: IParkItApi): Pager<Int, Provider> {
-        return Pager(config = PagingConfig(pageSize = 20)) {
-            ProvidersRemotePagingSource(api = api)
-        }
+    fun providesProvidersPager(database: AppDatabase, api: IParkItApi): Pager<Int, ProviderEntity> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator = ProviderRemoteMediator(
+                database = database,
+                api = api
+            ),
+            pagingSourceFactory = { database.providerDao.pagingSource() }
+        )
     }
 }

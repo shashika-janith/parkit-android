@@ -12,10 +12,8 @@ fun ProviderDto.toProviderEntity(): ProviderEntity {
         latitude = latitude,
         longitude = longitude,
         capacity = capacity,
-        hourlyRate = hourlyRate,
-        availableSpots = availableSpots,
-        contactNumber = contactNumber,
-        email = email
+        hourlyRate = rate,
+        phone = phone
     )
 }
 
@@ -28,8 +26,6 @@ fun ProviderEntity.toProvider(): Provider {
         longitude = longitude,
         capacity = capacity,
         hourlyRate = hourlyRate,
-        availableSpots = availableSpots,
-        contactNumber = contactNumber,
-        email = email
+        phone = phone,
     )
 }

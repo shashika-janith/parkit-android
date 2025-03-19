@@ -1,7 +1,15 @@
 package com.arcee.parkit.domain.repository
 
-import com.arcee.parkit.data.remote.dto.ProviderListResponseDto
+import androidx.paging.PagingData
+import com.arcee.parkit.data.remote.dto.ProviderResponseDto
+import com.arcee.parkit.domain.model.Provider
+import kotlinx.coroutines.flow.Flow
 
 interface IProviderRepository {
-    suspend fun getProviders(pageNo: Int, pageSize: Int): ProviderListResponseDto
+    fun getPagedItems(
+        latitude: Double,
+        longitude: Double
+    ): Flow<PagingData<Provider>>
+
+    fun getProviderById(id: Int): ProviderResponseDto
 }

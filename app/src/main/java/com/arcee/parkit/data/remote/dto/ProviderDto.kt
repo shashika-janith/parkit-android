@@ -7,16 +7,14 @@ data class ProviderDto(
     val id: Long,
     val name: String,
     val address: String,
-    val latitude: Float,
-    val longitude: Float,
+    val latitude: Double,
+    val longitude: Double,
+    @SerializedName("availableSlots")
     val capacity: Int,
-    @SerializedName("hourly_rate")
-    val hourlyRate: Float,
-    @SerializedName("available_spots")
-    val availableSpots: Int,
-    @SerializedName("contact_number")
-    val contactNumber: String? = null,
-    val email: String? = null
+    val rate: Float,
+    val phone: String? = null,
+    val email: String? = null,
+    val type: String
 )
 
 fun ProviderDto.toProvider(): Provider {
@@ -27,9 +25,7 @@ fun ProviderDto.toProvider(): Provider {
         latitude = latitude,
         longitude = longitude,
         capacity = capacity,
-        hourlyRate = hourlyRate,
-        availableSpots = availableSpots,
-        contactNumber = contactNumber,
-        email = email
+        hourlyRate = rate,
+        phone = phone
     )
 }

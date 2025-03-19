@@ -1,7 +1,9 @@
 package com.arcee.parkit.data.remote.dto
 
 data class ProviderListResponseDto(
-    val status: String,
-    val message: String,
+    val currentPage: Int,
+    val pageSize: Int,
+    val totalPages: Int,
+    val total: Int,
     val data: List<ProviderDto>
 )

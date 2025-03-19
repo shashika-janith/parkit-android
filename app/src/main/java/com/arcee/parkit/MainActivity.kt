@@ -29,6 +29,7 @@ import com.arcee.parkit.presentation.provider_detail.ProviderDetailScreen
 import com.arcee.parkit.presentation.sign_in.SignInScreen
 import com.arcee.parkit.presentation.sign_up.SignUpScreen
 import com.arcee.parkit.ui.theme.ParkItTheme
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,6 +37,8 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPreferencesRepo: UserPreferencesRepository
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     val viewModel: LocationPermissionViewModel by viewModels<LocationPermissionViewModel>()
 
@@ -99,6 +102,11 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.ParkingSpaceLocatorScreen.route) {
                             ParkingSpaceLocatorScreen(onNavigateBack = {
                                 navController.popBackStack()
+                            }, onStartNavClicked = { lat, lon ->
+                                startNavigationGM(
+                                    lat,
+                                    lon
+                                )
                             })
                         }
                         composable(Screen.SignInScreen.route) {

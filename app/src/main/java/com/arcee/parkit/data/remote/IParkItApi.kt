@@ -1,9 +1,10 @@
 package com.arcee.parkit.data.remote
 
-import com.arcee.parkit.data.remote.dto.SignInResponseDto
+import com.arcee.parkit.data.remote.dto.FilterParkingAreasDto
 import com.arcee.parkit.data.remote.dto.NotificationListResponseDto
 import com.arcee.parkit.data.remote.dto.ProviderListResponseDto
 import com.arcee.parkit.data.remote.dto.SignInDto
+import com.arcee.parkit.data.remote.dto.SignInResponseDto
 import com.arcee.parkit.data.remote.dto.SignUpDto
 import com.arcee.parkit.data.remote.dto.SignUpResponseDto
 import retrofit2.http.Body
@@ -24,9 +25,6 @@ interface IParkItApi {
         @Query("pageSize") pageSize: Int
     ): NotificationListResponseDto
 
-    @GET("/providers")
-    suspend fun getProviders(
-        @Query("pageNo") pageNo: Int,
-        @Query("pageSize") pageSize: Int
-    ): ProviderListResponseDto
+    @POST("/area/filter")
+    suspend fun getProviders(@Body dto: FilterParkingAreasDto): ProviderListResponseDto
 }
