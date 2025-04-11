@@ -34,7 +34,7 @@ fun VehicleTypeChip(type: VehicleTypeEnum) {
         ) {
             Icon(
                 painter = painterResource(id = VehicleTypeEnum.getVehicleTypeIcon(type)),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.secondary,
                 contentDescription = null,
                 modifier = Modifier
                     .width(24.dp)
@@ -47,7 +47,7 @@ fun VehicleTypeChip(type: VehicleTypeEnum) {
 
 @Preview(showBackground = false)
 @Composable
-fun ActivityScreenPreview(
+fun VehicleTypeChipPreview(
     type: VehicleTypeEnum = VehicleTypeEnum.CAR
 ) {
     VehicleTypeChip(type = type)
