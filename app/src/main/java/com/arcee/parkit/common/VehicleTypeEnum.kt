@@ -17,5 +17,14 @@ enum class VehicleTypeEnum(val type: String) {
                 BUS -> R.drawable.bus_24
             }
         }
+
+        fun getVehicleTypeLabel(type: VehicleTypeEnum): Int {
+            return when (type) {
+                CAR -> R.string.car
+                LORRY -> R.string.lorry
+                SCOOTER -> R.string.motorcycle
+                BUS -> R.string.bus
+            }
+        }
     }
 }
