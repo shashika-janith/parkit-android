@@ -9,4 +9,8 @@ class PagingSourceFactory @Inject constructor(private val api: IParkItApi) {
     ): ProvidersRemotePagingSource {
         return ProvidersRemotePagingSource(api, latitude, longitude)
     }
+
+    fun createFavouriteRemotePagingSource(): FavouriteRemotePagingSource {
+        return FavouriteRemotePagingSource(api)
+    }
 }
