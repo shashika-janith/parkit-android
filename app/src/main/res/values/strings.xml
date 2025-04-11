@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ParkIt</string>
+    <string name="car">Car</string>
+    <string name="lorry">Lorry</string>
+    <string name="motorcycle">Motorcycle</string>
+    <string name="bus">Bus</string>
 </resources>
