@@ -11,13 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.arcee.parkit.R
 import com.arcee.parkit.presentation.activity_detail.components.InfoRow
+import com.arcee.parkit.presentation.components.ScreenHeader
 
 @Composable
 fun ActivityDetailScreen(
@@ -46,22 +43,7 @@ fun ActivityDetailScreen(
                 .background(color = Color.White)
         ) {
             Column(modifier = Modifier.padding(horizontal = 15.dp)) {
-                Row(
-                    modifier = Modifier.padding(top = 12.dp, bottom = 21.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            modifier = Modifier.size(27.dp)
-                        )
-                    }
-                    Text(
-                        text = "Activity Details",
-                        style = MaterialTheme.typography.headlineSmall.merge(fontWeight = FontWeight.Bold),
-                    )
-                }
+                ScreenHeader(onNavigateBack = onNavigateBack, title = "Activity Details")
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -148,7 +130,9 @@ fun ActivityDetailScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp)
                     ) {
                         Text(
                             text = "Cash",
@@ -160,7 +144,9 @@ fun ActivityDetailScreen(
                         Icon(
                             painter = painterResource(R.drawable.rounded_money_24),
                             contentDescription = null,
-                            modifier = Modifier.height(30.dp).aspectRatio(1.0f),
+                            modifier = Modifier
+                                .height(30.dp)
+                                .aspectRatio(1.0f),
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Spacer(Modifier.weight(weight = 1f))
