@@ -29,7 +29,8 @@ fun FavoriteDto.toFavorite(): Favorite {
         longitude = longitude,
         capacity = capacity,
         hourlyRate = hourlyRate,
-        phone = phone
+        phone = phone,
+        images = arrayOf()
     )
 }
 

@@ -10,4 +10,5 @@ data class Favorite(
     val capacity: Int,
     val hourlyRate: Float,
     val phone: String?,
+    val images: Array<String>
 )

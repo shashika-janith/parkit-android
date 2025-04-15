@@ -13,10 +13,12 @@ import com.arcee.parkit.data.local.ProviderEntity
 import com.arcee.parkit.data.remote.IParkItApi
 import com.arcee.parkit.data.remote.PagingSourceFactory
 import com.arcee.parkit.data.remote.ProviderRemoteMediator
+import com.arcee.parkit.data.repository.FavoriteRepositoryImpl
 import com.arcee.parkit.data.repository.NotificationRepositoryImpl
 import com.arcee.parkit.data.repository.ProviderRepositoryImpl
 import com.arcee.parkit.data.repository.UserPreferencesRepository
 import com.arcee.parkit.data.repository.UserRepositoryImpl
+import com.arcee.parkit.domain.repository.IFavoriteRepository
 import com.arcee.parkit.domain.repository.INotificationRepository
 import com.arcee.parkit.domain.repository.IProviderRepository
 import com.arcee.parkit.domain.repository.IUserRepository
@@ -69,6 +71,13 @@ object AppModule {
     @Singleton
     fun providesProviderRepository(pagingSourceFactory: PagingSourceFactory): IProviderRepository {
         return ProviderRepositoryImpl(pagingSourceFactory)
+    @Provides
+    @Singleton
+    fun providesFavouriteRepository(
+        api: IParkItApi,
+        pagingSourceFactory: PagingSourceFactory
+    ): IFavoriteRepository {
+        return FavoriteRepositoryImpl(api, pagingSourceFactory)
     }
 
     @Provides

@@ -64,6 +64,10 @@ fun ParkingSpaceLocatorScreen(
 
     var targetLocation by remember { mutableStateOf<Location?>(null) }
 
+    fun handleAddToFavorites(id: Long) {
+        viewModel.addToFavorites(id)
+    }
+
     fun updateCurrLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { loc ->
             viewModel.setLocation(loc)
@@ -117,11 +121,6 @@ fun ParkingSpaceLocatorScreen(
         }
     }
 
-    /**
-     * Add to favourites.
-     */
-    fun handleSaveToFavourites() {}
-
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Box(
             modifier = Modifier
@@ -160,10 +159,10 @@ fun ParkingSpaceLocatorScreen(
 
                             providers?.itemSnapshotList?.forEach { provider ->
                                 provider?.let { it ->
-                                    val singapore = LatLng(it.latitude, it.longitude)
+                                    val latLng = LatLng(it.latitude, it.longitude)
 
                                     Marker(
-                                        state = rememberMarkerState(position = singapore),
+                                        state = rememberMarkerState(position = latLng),
                                         title = "Singapore",
                                         snippet = "Marker",
                                         onClick = {
@@ -191,6 +190,7 @@ fun ParkingSpaceLocatorScreen(
                     Icon(
                         Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = "Navigate back",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
 
@@ -207,7 +207,8 @@ fun ParkingSpaceLocatorScreen(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.gps_fixed_24),
-                        contentDescription = "Update current location"
+                        contentDescription = "Update current location",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
@@ -218,7 +219,7 @@ fun ParkingSpaceLocatorScreen(
                 }) {
                     ProviderItem(
                         data = selectedLocation!!,
-                        onBookmarkClicked = { handleSaveToFavourites() },
+                        onBookmarkClicked = { id: Long -> handleAddToFavorites(id) },
                         onPhoneClicked = { phoneNumber -> handleDialPhoneNumber(phoneNumber) },
                         onStartNavClicked = onStartNavClicked
                     )
@@ -233,7 +234,6 @@ fun ParkingSpaceLocatorScreen(
 fun ParkingSpaceLocatorScreenPreview() {
     ParkingSpaceLocatorScreen(
         onNavigateBack = {},
-        viewModel = TODO(),
         onStartNavClicked = TODO(),
     )
 }
