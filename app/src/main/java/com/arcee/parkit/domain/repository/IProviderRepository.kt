@@ -11,5 +11,5 @@ interface IProviderRepository {
         longitude: Double
     ): Flow<PagingData<Provider>>
 
-    fun getProviderById(id: Int): ProviderResponseDto
+    suspend fun getProviderById(id: Int): ProviderResponseDto
 }
