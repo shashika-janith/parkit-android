@@ -20,40 +20,31 @@ fun InfoItem(label: String, value: String, icon: ImageVector) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(6.dp)
+            .padding(horizontal = 15.dp, vertical = 6.dp)
     ) {
-
         // References
         val (iconRef, labelRef, valueRef) = createRefs()
 
-        Icon(
-            icon,
-            contentDescription = null,
-            modifier = Modifier.constrainAs(iconRef) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
+        Icon(icon, contentDescription = null, modifier = Modifier.constrainAs(iconRef, {
+            start.linkTo(parent.start)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+        }))
+        Text(text = label,
+            style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.constrainAs(labelRef) {
                 top.linkTo(parent.top)
                 start.linkTo(iconRef.end, margin = 9.dp)
-                bottom.linkTo(valueRef.top, margin = 3.dp)
-            }
-        )
-        Text(
-            text = value,
+                bottom.linkTo(valueRef.top)
+            })
+        Text(text = value,
             fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.constrainAs(valueRef) {
-                top.linkTo(labelRef.bottom)
+                top.linkTo(labelRef.bottom, margin = 3.dp)
                 start.linkTo(iconRef.end, margin = 9.dp)
                 bottom.linkTo(parent.bottom)
             }
-
         )
     }
 }
