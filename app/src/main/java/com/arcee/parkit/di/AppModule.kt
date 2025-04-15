@@ -25,6 +25,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit.Builder
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -34,11 +35,22 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun providesParkItApi(): IParkItApi {
+    fun providesParkItApi(authTokenProvider: AuthTokenProvider): IParkItApi {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(authTokenProvider))
+            .build()
+
         return Builder().baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IParkItApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthTokenProvider(userPreferencesRepository: UserPreferencesRepository): AuthTokenProvider {
+        return AuthTokenProvider(userPreferencesRepository)
     }
 
     @Provides
