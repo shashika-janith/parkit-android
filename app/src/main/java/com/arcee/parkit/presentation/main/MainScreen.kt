@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.Screen
 import com.arcee.parkit.presentation.activities.ActivitiesScreen
 import com.arcee.parkit.presentation.favourites.FavouritesScreen
@@ -42,7 +43,7 @@ val topLevelRoutes = listOf(
 
 @Composable
 fun MainScreen(
-    onProviderClicked: (id: Int) -> Unit,
+    onProviderClicked: (id: Provider) -> Unit,
     onActivityClicked: (id: Int, isActive: Boolean) -> Unit,
     onSearchClicked: () -> Unit,
     onNotificationsClicked: () -> Unit
@@ -57,7 +58,7 @@ fun MainScreen(
 
 @Composable
 fun Content(
-    onProviderClicked: (id: Int) -> Unit,
+    onProviderClicked: (data: Provider) -> Unit,
     onActivityClicked: (id: Int, isActive: Boolean) -> Unit,
     onSearchClicked: () -> Unit,
     onNotificationsClicked: () -> Unit
@@ -116,7 +117,7 @@ fun Content(
                 )
             }
             composable(Screen.FavouriteScreen.route) {
-                FavouritesScreen()
+                FavouritesScreen(onProviderClicked = onProviderClicked)
             }
         }
     }

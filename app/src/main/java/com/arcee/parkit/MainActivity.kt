@@ -11,17 +11,27 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.arcee.parkit.data.repository.UserPreferencesRepository
+import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.Screen
 import com.arcee.parkit.presentation.active_session.ActiveSessionScreen
 import com.arcee.parkit.presentation.activity_detail.ActivityDetailScreen
+import com.arcee.parkit.presentation.booking.BookingScreen
 import com.arcee.parkit.presentation.main.MainScreen
 import com.arcee.parkit.presentation.notifications.NotificationsScreen
 import com.arcee.parkit.presentation.parking_space_locator.ParkingSpaceLocatorScreen
@@ -29,7 +39,6 @@ import com.arcee.parkit.presentation.provider_detail.ProviderDetailScreen
 import com.arcee.parkit.presentation.sign_in.SignInScreen
 import com.arcee.parkit.presentation.sign_up.SignUpScreen
 import com.arcee.parkit.ui.theme.ParkItTheme
-import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,9 +47,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPreferencesRepo: UserPreferencesRepository
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     val viewModel: LocationPermissionViewModel by viewModels<LocationPermissionViewModel>()
+
 
     private fun startNavigationGM(lat: Double, lon: Double) {
         val gmmIntentUri =
@@ -55,73 +63,121 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private suspend fun getStartDestination(): String {
+        val preferences = userPreferencesRepo.fetchInitialPreferences()
+
+        if (preferences?.accessToken.isNullOrBlank()) {
+            return Screen.SignInScreen.route
+        } else {
+            return Screen.MainScreen.route
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var startDestination by remember { mutableStateOf<String?>(null) }
+
+            LaunchedEffect(Unit) {
+                startDestination = getStartDestination()
+            }
+
             ParkItTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.MainScreen.route
-                    ) {
-                        composable(Screen.MainScreen.route) {
-                            MainScreen(
-                                onProviderClicked = { id: Int ->
-                                    navController.navigate(Screen.ProviderDetailScreen.route + "/${id}")
-                                },
-                                onActivityClicked = { id: Int, isActive: Boolean ->
-                                    if (isActive)
-                                        navController.navigate(Screen.ActiveSessionScreen.route)
-                                    else
-                                        navController.navigate(Screen.ActivityDetailScreen.route)
-                                },
-                                onSearchClicked = {
-                                    navController.navigate(Screen.ParkingSpaceLocatorScreen.route)
-                                },
-                                onNotificationsClicked = {
-                                    navController.navigate(Screen.NotificationsScreen.route)
+                    if (startDestination != null) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = startDestination!!
+                        ) {
+                            composable(Screen.MainScreen.route) {
+                                MainScreen(
+                                    onProviderClicked = { data: Provider ->
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            "provider",
+                                            data
+                                        )
+                                        navController.navigate(Screen.ProviderDetailScreen.route + "/${id}")
+                                    },
+                                    onActivityClicked = { id: Int, isActive: Boolean ->
+                                        if (isActive)
+                                            navController.navigate(Screen.ActiveSessionScreen.route)
+                                        else
+                                            navController.navigate(Screen.ActivityDetailScreen.route)
+                                    },
+                                    onSearchClicked = {
+                                        navController.navigate(Screen.ParkingSpaceLocatorScreen.route)
+                                    },
+                                    onNotificationsClicked = {
+                                        navController.navigate(Screen.NotificationsScreen.route)
+                                    }
+                                )
+                            }
+                            composable(Screen.ProviderDetailScreen.route + "/{providerId}") {
+                                val provider = navController.previousBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.get<Provider>("provider")
+
+                                if (provider != null) {
+                                    ProviderDetailScreen(
+                                        data = provider,
+                                        onStartNavClicked = { lat, lon ->
+                                            startNavigationGM(
+                                                lat,
+                                                lon
+                                            )
+                                        },
+                                        onNavigateBack = {
+                                            navController.popBackStack()
+                                            navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>("provider")
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                        composable(Screen.ProviderDetailScreen.route + "/{providerId}") {
-                            ProviderDetailScreen(onStartNavClicked = { lat, lon ->
-                                startNavigationGM(
-                                    lat,
-                                    lon
+                            }
+                            composable(Screen.BookingScreen.route) {
+                                BookingScreen(onNavigateBack = {})
+                            }
+                            composable(Screen.ActivityDetailScreen.route) {
+                                ActivityDetailScreen(onNavigateBack = {
+                                    navController.popBackStack()
+                                    navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>("provider")
+                                })
+                            }
+                            composable(Screen.ParkingSpaceLocatorScreen.route) {
+                                ParkingSpaceLocatorScreen(
+                                    onNavigateBack = {
+                                        navController.popBackStack()
+                                    },
+                                    onStartNavClicked = { lat, lon ->
+                                        startNavigationGM(
+                                            lat,
+                                            lon
+                                        )
+                                    }
                                 )
-                            })
+                            }
+                            composable(Screen.SignInScreen.route) {
+                                SignInScreen(didSignIn = { data ->
+                                    navController.navigate(Screen.MainScreen.route)
+                                })
+                            }
+                            composable(Screen.SignUpScreen.route) {
+                                SignUpScreen()
+                            }
+                            composable(Screen.NotificationsScreen.route) {
+                                NotificationsScreen()
+                            }
+                            composable(Screen.ActiveSessionScreen.route) {
+                                ActiveSessionScreen(onNavigateBack = {})
+                            }
                         }
-                        composable(Screen.ActivityDetailScreen.route) {
-                            ActivityDetailScreen(onNavigateBack = {})
-                        }
-                        composable(Screen.ParkingSpaceLocatorScreen.route) {
-                            ParkingSpaceLocatorScreen(onNavigateBack = {
-                                navController.popBackStack()
-                            }, onStartNavClicked = { lat, lon ->
-                                startNavigationGM(
-                                    lat,
-                                    lon
-                                )
-                            })
-                        }
-                        composable(Screen.SignInScreen.route) {
-                            SignInScreen(didSignIn = { data ->
-                                navController.navigate(Screen.MainScreen.route)
-                            })
-                        }
-                        composable(Screen.SignUpScreen.route) {
-                            SignUpScreen()
-                        }
-                        composable(Screen.NotificationsScreen.route) {
-                            NotificationsScreen()
-                        }
-                        composable(Screen.ActiveSessionScreen.route) {
-                            ActiveSessionScreen(onNavigateBack = {})
+                    } else {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
                         }
                     }
                 }
@@ -137,6 +193,7 @@ class MainActivity : ComponentActivity() {
                 PermissionStatus.DENIED == status -> {
 //                    TODO("Show an educational UI")
                 }
+
                 else -> {
                     requestLocationPermission()
                 }
