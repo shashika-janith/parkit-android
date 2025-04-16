@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.home.components
+package com.arcee.parkit.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,20 +31,18 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.arcee.parkit.R
 import com.arcee.parkit.domain.model.Provider
-import com.arcee.parkit.presentation.components.Chip
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProviderItem(
     data: Provider,
-    onItemClick: (id: Int) -> Unit
+    onItemClick: (data: Provider) -> Unit
 ) {
     Box(modifier = Modifier
         .clip(shape = RoundedCornerShape(12.dp))
         .background(color = Color.White)
         .fillMaxWidth()
-        .clickable { onItemClick(1) }) {
+        .clickable { onItemClick(data) }) {
         Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -68,8 +66,7 @@ fun ProviderItem(
                         }
                     }
                     Text(
-                        text = data.name,
-                        style = MaterialTheme.typography.bodyMedium.merge(
+                        text = data.name, style = MaterialTheme.typography.bodyMedium.merge(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
@@ -118,7 +115,7 @@ fun ProviderItem(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "${data.availableSpots} Available",
+                        text = "${data.capacity} Available",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelSmall.merge(fontWeight = FontWeight.SemiBold),
                     )
@@ -135,18 +132,16 @@ fun ProviderItemPreview(
         id = 1L,
         name = "Downtown Parking Garage",
         address = "123 Main St, Downtown",
-        latitude = 40.7128F,
-        longitude = -74.006F,
+        latitude = 40.7128,
+        longitude = -74.006,
         capacity = 200,
-        availableSpots = 25,
-        contactNumber = "+1234567890",
-        email = "info@downtownparking.com",
-        hourlyRate = 150.00F
-    ),
-    onItemClick: (id: Int) -> Unit = {}
+        phone = "+1234567890",
+        hourlyRate = 150.00F,
+        images = arrayOf(),
+        isFavorite = false
+    ), onItemClick: (id: Provider) -> Unit = {}
 ) {
     ProviderItem(
-        data = data,
-        onItemClick = onItemClick
+        data = data, onItemClick = onItemClick
     )
 }
