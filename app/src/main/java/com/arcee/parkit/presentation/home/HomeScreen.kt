@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -21,34 +20,42 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
+import com.arcee.parkit.common.Resource
 import com.arcee.parkit.domain.model.Provider
-import com.arcee.parkit.presentation.home.components.ProviderItem
+import com.arcee.parkit.presentation.home.components.ProviderList
 import com.arcee.parkit.ui.theme.ParkItTheme
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     onSearchClicked: () -> Unit,
-    onProviderClicked: (id: Int) -> Unit,
+    onProviderClicked: (data: Provider) -> Unit,
     onNotificationsClicked: () -> Unit
 ) {
-    val providers = viewModel.providerPagingFlow.collectAsLazyPagingItems()
+    val providers by viewModel.providers.collectAsState()
+
+    val context = LocalContext.current
+
+    remember {
+        LocationServices.getFusedOrientationProviderClient(context)
+    }
 
     HomeScreenContent(
         onSearchClicked = onSearchClicked,
@@ -61,9 +68,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     onSearchClicked: () -> Unit,
-    onProviderClicked: (id: Int) -> Unit,
+    onProviderClicked: (data: Provider) -> Unit,
     onNotificationsClicked: () -> Unit,
-    providers: LazyPagingItems<Provider>
+    providers: Resource<Flow<PagingData<Provider>>>
 ) {
     Box(
         modifier = Modifier.padding(vertical = 12.dp)
@@ -99,7 +106,7 @@ fun HomeScreenContent(
                 .clickable { onSearchClicked() }) {
                 Column(
                     modifier = Modifier
-                        .background(color = Color.White)
+                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 20.dp),
                 ) {
@@ -107,69 +114,70 @@ fun HomeScreenContent(
                         text = "Park Easy & Safely",
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clip(shape = RoundedCornerShape(50))
-                            .background(MaterialTheme.colorScheme.background)
+                            .background(MaterialTheme.colorScheme.tertiaryContainer)
                             .fillMaxWidth()
                             .padding(horizontal = 15.dp, vertical = 9.dp)
                     ) {
                         Text(
-                            text = "Find parking space", style = MaterialTheme.typography.labelSmall
+                            text = "Find parking space",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
                         )
                         Spacer(Modifier.weight(weight = 1f))
                         Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
                     }
                 }
             }
+
             Spacer(Modifier.height(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column {
-                    Text(
-                        text = "Parking Nearby", style = MaterialTheme.typography.titleMedium.merge(
-                            fontWeight = FontWeight.Bold
-                        )
+
+            Column {
+                Text(
+                    text = "Recent Stops", style = MaterialTheme.typography.titleMedium.merge(
+                        fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = "Find your perfect spot",
-                        style = MaterialTheme.typography.labelSmall,
-                    )
-                }
-                Spacer(Modifier.weight(weight = 1f))
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(
-                        text = "See More", style = MaterialTheme.typography.bodySmall.merge(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
+                )
+                Text(
+                    text = "Find your perfect spot",
+                    style = MaterialTheme.typography.labelSmall,
+                )
             }
+
             Spacer(modifier = Modifier.height(9.dp))
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                if (providers.loadState.refresh == LoadState.Loading) {
-                    item {
-                        Text(
-                            text = "Waiting for items to load from the backend",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(Alignment.CenterHorizontally)
+
+            when (val state = providers) {
+                is Resource.Error -> {
+                    Text(
+                        text = "Waiting for items to load from the backend",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is Resource.Loading -> {
+                    Text(
+                        text = "Waiting for items to load from the backend",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is Resource.Success -> {
+                    val pagingDataFlow = state.data
+                    if (pagingDataFlow != null) {
+                        val lazyPagingItems = pagingDataFlow.collectAsLazyPagingItems()
+                        ProviderList(
+                            lazyPagingItems = lazyPagingItems, onProviderClicked = onProviderClicked
                         )
-                    }
-                } else {
-                    items(
-                        count = providers.itemCount,
-                        key = providers.itemKey { it.id },
-                    ) { index ->
-                        val item = providers[index]
-                        if (item != null) {
-                            ProviderItem(data = item, onItemClick = onProviderClicked)
-                        }
                     }
                 }
             }
@@ -180,9 +188,9 @@ fun HomeScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenContentPreview(
-    providers: LazyPagingItems<Provider> = flowOf(PagingData.empty<Provider>()).collectAsLazyPagingItems(),
+    providers: Resource<Flow<PagingData<Provider>>> = Resource.Success(flowOf(PagingData.empty())),
     onSearchClicked: () -> Unit = {},
-    onProviderClicked: (id: Int) -> Unit = {},
+    onProviderClicked: (data: Provider) -> Unit = {},
     onNotificationsClicked: () -> Unit = {},
 
     ) {
