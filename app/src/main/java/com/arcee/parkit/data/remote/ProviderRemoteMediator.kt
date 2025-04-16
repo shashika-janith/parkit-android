@@ -8,6 +8,7 @@ import androidx.room.withTransaction
 import com.arcee.parkit.data.local.AppDatabase
 import com.arcee.parkit.data.local.ProviderEntity
 import com.arcee.parkit.data.mappers.toProviderEntity
+import com.arcee.parkit.data.remote.dto.FilterParkingAreasDto
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -25,7 +26,7 @@ class ProviderRemoteMediator(
         state: PagingState<Int, ProviderEntity>
     ): MediatorResult {
         return try {
-            val loadKey = when(loadType) {
+            val loadKey = when (loadType) {
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
@@ -39,7 +40,14 @@ class ProviderRemoteMediator(
                 }
             }
 
-            val response = api.getProviders(pageNo = state.anchorPosition?.plus(1) ?: 0, pageSize = state.config.pageSize)
+            val reqPayload = FilterParkingAreasDto(
+                pageNo = state.anchorPosition?.plus(1) ?: 1,
+                pageSize = state.config.pageSize,
+                latitude = null,
+                longitude = null
+            )
+
+            val response = api.getProviders(reqPayload)
             lateinit var providerEntities: List<ProviderEntity>
 
             database.withTransaction {
@@ -56,7 +64,7 @@ class ProviderRemoteMediator(
             MediatorResult.Success(
                 endOfPaginationReached = endOfPaginationReached,
 
-            )
+                )
         } catch (e: IOException) {
             MediatorResult.Error(e)
         } catch (e: HttpException) {

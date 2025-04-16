@@ -69,8 +69,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesProviderRepository(pagingSourceFactory: PagingSourceFactory): IProviderRepository {
-        return ProviderRepositoryImpl(pagingSourceFactory)
+    fun providesProviderRepository(
+        api: IParkItApi,
+        pagingSourceFactory: PagingSourceFactory
+    ): IProviderRepository {
+        return ProviderRepositoryImpl(api, pagingSourceFactory)
+    }
+
     @Provides
     @Singleton
     fun providesFavouriteRepository(
