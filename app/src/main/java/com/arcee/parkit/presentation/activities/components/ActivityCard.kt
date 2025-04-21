@@ -119,7 +119,7 @@ fun ActivityCard(data: ParkingActivity, onClicked: (id: Int, isActive: Boolean) 
 @Composable
 fun ActivityCardPreview(
     activities: List<ParkingActivity> = listOf(ParkingActivity(id = 1)),
-    onClicked: (id: Int, isActive: Boolean) -> Unit = { _: Int, _: Boolean -> {}}
+    onClicked: (id: Int, isActive: Boolean) -> Unit = { _: Int, _: Boolean -> {} }
 ) {
     ActivityCard(onClicked = onClicked, data = activities[1])
 }
