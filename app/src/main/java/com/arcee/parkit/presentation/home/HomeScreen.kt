@@ -106,7 +106,7 @@ fun HomeScreenContent(
                 .clickable { onSearchClicked() }) {
                 Column(
                     modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                        .background(color = MaterialTheme.colorScheme.tertiary)
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 20.dp),
                 ) {
@@ -114,7 +114,7 @@ fun HomeScreenContent(
                         text = "Park Easy & Safely",
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        color = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier.padding(bottom = 6.dp)
                     )
                     Row(
@@ -131,7 +131,11 @@ fun HomeScreenContent(
                             color = MaterialTheme.colorScheme.onTertiaryContainer
                         )
                         Spacer(Modifier.weight(weight = 1f))
-                        Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
                     }
                 }
             }

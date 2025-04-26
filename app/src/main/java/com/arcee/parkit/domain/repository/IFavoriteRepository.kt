@@ -8,5 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface IFavoriteRepository {
     suspend fun addToFavorites(id: Long): AddToFavoritesResponseDto
 
+    suspend fun removeFromFavorites(id: Long): AddToFavoritesResponseDto
+
     fun getPagedItems(): Flow<PagingData<Favorite>>
 }

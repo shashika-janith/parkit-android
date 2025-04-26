@@ -1,19 +1,27 @@
 package com.arcee.parkit.presentation.favourites
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arcee.parkit.common.Resource
 import com.arcee.parkit.domain.use_case.list_favorites.ListFavoritesUseCase
+import com.arcee.parkit.domain.use_case.remove_from_favorites.RemoveFromFavoritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    listFavoritesUseCase: ListFavoritesUseCase
+    private val listFavoritesUseCase: ListFavoritesUseCase,
+    private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase
 ) : ViewModel() {
+    private val _state = mutableStateOf(FavoritesState())
+    val state: State<FavoritesState> = _state
 
     val stateFlow = flow {
         emit(Resource.Loading())
@@ -29,4 +37,25 @@ class FavouritesViewModel @Inject constructor(
         initialValue = Resource.Loading()
     )
 
+    fun removeFromFavorites(id: Long) {
+        removeFromFavoritesUseCase(id).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+
+                }
+
+                is Resource.Error -> {
+                    _state.value =
+                        FavoritesState(
+                            error = result.message ?: "An unexpected error occurred.",
+                            isLoading = false
+                        )
+                }
+
+                is Resource.Loading -> {
+                    _state.value = FavoritesState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 }
