@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class FavouritesViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     private val listFavoritesUseCase: ListFavoritesUseCase,
     private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase
 ) : ViewModel() {

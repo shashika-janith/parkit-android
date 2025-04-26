@@ -38,8 +38,8 @@ import com.arcee.parkit.presentation.components.FavoriteItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavouritesScreen(
-    viewModel: FavouritesViewModel = hiltViewModel<FavouritesViewModel>(),
+fun FavoritesScreen(
+    viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
     onProviderClicked: (data: Provider) -> Unit,
 ) {
     var selectedFavoriteItem by remember { mutableStateOf<Favorite?>(null) }
