@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.favourites
+package com.arcee.parkit.presentation.favorites
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

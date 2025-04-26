@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.favourites
+package com.arcee.parkit.presentation.favorites
 
 data class FavoritesState(
     val isLoading: Boolean = false,

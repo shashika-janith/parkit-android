@@ -1,4 +1,4 @@
-package com.arcee.parkit.presentation.favourites
+package com.arcee.parkit.presentation.favorites
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
