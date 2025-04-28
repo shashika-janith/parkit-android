@@ -38,6 +38,7 @@ import com.arcee.parkit.presentation.parking_space_locator.ParkingSpaceLocatorSc
 import com.arcee.parkit.presentation.provider_detail.ProviderDetailScreen
 import com.arcee.parkit.presentation.sign_in.SignInScreen
 import com.arcee.parkit.presentation.sign_up.SignUpScreen
+import com.arcee.parkit.presentation.update_profile.UpdateProfileScreen
 import com.arcee.parkit.ui.theme.ParkItTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -69,7 +70,8 @@ class MainActivity : ComponentActivity() {
         if (preferences?.accessToken.isNullOrBlank()) {
             return Screen.SignInScreen.route
         } else {
-            return Screen.MainScreen.route
+//            return Screen.MainScreen.route
+            return Screen.UpdateProfileScreen.route
         }
     }
 
@@ -133,18 +135,22 @@ class MainActivity : ComponentActivity() {
                                         },
                                         onNavigateBack = {
                                             navController.popBackStack()
-                                            navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>("provider")
+                                            navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>(
+                                                "provider"
+                                            )
                                         }
                                     )
                                 }
                             }
                             composable(Screen.BookingScreen.route) {
-                                BookingScreen(onNavigateBack = {})
+                                BookingScreen(onNavigateBack = { navController.popBackStack() })
                             }
                             composable(Screen.ActivityDetailScreen.route) {
                                 ActivityDetailScreen(onNavigateBack = {
                                     navController.popBackStack()
-                                    navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>("provider")
+                                    navController.currentBackStackEntry?.savedStateHandle?.remove<Provider>(
+                                        "provider"
+                                    )
                                 })
                             }
                             composable(Screen.ParkingSpaceLocatorScreen.route) {
@@ -172,7 +178,10 @@ class MainActivity : ComponentActivity() {
                                 NotificationsScreen()
                             }
                             composable(Screen.ActiveSessionScreen.route) {
-                                ActiveSessionScreen(onNavigateBack = {})
+                                ActiveSessionScreen(onNavigateBack = { navController.popBackStack() })
+                            }
+                            composable(Screen.UpdateProfileScreen.route) {
+                                UpdateProfileScreen(onNavigateBack = { navController.popBackStack() })
                             }
                         }
                     } else {
