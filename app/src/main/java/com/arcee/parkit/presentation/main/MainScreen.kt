@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.arcee.parkit.domain.model.Provider
 import com.arcee.parkit.presentation.Screen
 import com.arcee.parkit.presentation.activities.ActivitiesScreen
-import com.arcee.parkit.presentation.favourites.FavouritesScreen
+import com.arcee.parkit.presentation.favorites.FavoritesScreen
 import com.arcee.parkit.presentation.home.HomeScreen
 import com.arcee.parkit.presentation.profile.ProfileScreen
 
@@ -113,11 +113,11 @@ fun Content(
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(
-                    handleSignOut = { TODO() }
+                    didSignOut = { TODO() }
                 )
             }
             composable(Screen.FavouriteScreen.route) {
-                FavouritesScreen(onProviderClicked = onProviderClicked)
+                FavoritesScreen(onProviderClicked = onProviderClicked)
             }
         }
     }
